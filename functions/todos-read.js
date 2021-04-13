@@ -1,5 +1,5 @@
 /* code from functions/todos-read.js */
-import faunadb from 'faunadb'
+const faunadb = require('faunadb')
 
 
 const q = faunadb.query
@@ -11,15 +11,16 @@ exports.handler = (event, context, callback) => {
   
   return client.query(
     q.Map(
-      q.Paginate(q.Documents(q.Collection("todos"))),
+      q.Paginate(q.Match(q.Index("readData"))),
+     // q.Paginate(q.Documents(q.Collection("todos"))),
       q.Lambda(x => q.Get(x))
     )
   )
   .then((response) => {
-    console.log("success", response)
+    console.log("success", response.data)
     return callback(null, {
       statusCode: 200,
-      body: JSON.stringify(response)
+      body: JSON.stringify(response.data)
     })
   }).catch((error) => {
     console.log("error", error)

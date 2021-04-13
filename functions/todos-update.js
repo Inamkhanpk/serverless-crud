@@ -1,5 +1,5 @@
 /* code from functions/todos-update.js */
-import faunadb from 'faunadb'
+const faunadb = require('faunadb')
 
 
 const q = faunadb.query
